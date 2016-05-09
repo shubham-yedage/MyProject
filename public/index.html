@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<input lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>welcome</title>
+
+</head>
+<h1>Welcome</h1>
+<input id="name"/>
+<input id="id_data" value="id"/>
+<button type="button" onclick="removeName()">remove</button>
+<button type="button" onclick="change()">ADD</button>
+<p id="id2" ></p>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script>
+    var text=document.getElementById("name").value;
+    var data;
+    var xhr = new XMLHttpRequest();
+
+    $( window ).load(function() {
+        // Run code
+        $.get("http://localhost:9000/persons", function(data, status){
+        showResult(data);
+        });
+    });
+
+    function change(){
+        text=document.getElementById("name").value;
+        $.post('http://localhost:9000/person',
+        {
+            'name': text
+        },
+        function(data,status){
+            showResult(data);
+        });
+    }
+
+    function showResult(data)
+    {
+        document.getElementById("id2").innerHTML = data;
+    }
+
+    function removeName()
+    {
+        data=document.getElementById("id_data").value;
+        alert("data:"+data);
+        xhr.open("DELETE", "http://localhost:9000/person/1");
+        xhr.withCredentials = true;
+        //xhr.send(data);
+    }
+function remove(id)
+    {
+        //data=document.getElementById("id_data").value;
+//        alert("data:"+data);
+        xhr.open("DELETE", "http://localhost:9000/person/"+id);
+        xhr.withCredentials = true;
+        //xhr.send(data);
+    }
+
+    </script>
+</body>
+</html>

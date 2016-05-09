@@ -1,0 +1,31 @@
+New log file opened at Fri Apr 22 09:02:41 IST 2016 by 17774@SHUBHAM5252
+Taking next connection to: 46181
+New client attempting to connect on port: 40690-46181
+  Address = /127.0.1.1:46181
+This client on port 40690 has uuid 95d1ef5f-2c9f-47e0-b534-e39547944122 configName activator humanReadableName Activator protocolVersion 3 featureTags Vector()
+Connected Clients: activator-95d1ef5f-2c9f-47e0-b534-e39547944122
+Taking next connection to: 46181
+New client attempting to connect on port: 40692-46181
+  Address = /127.0.1.1:46181
+Handshake exception on socket: 40692
+sbt.impl.ipc.HandshakeException: Unable to perform handshake
+	at sbt.impl.ipc.Peer.handshake(IPC.scala:46)
+	at sbt.impl.ipc.MultiClientServer.<init>(IPC.scala:150)
+	at sbt.server.SbtServerSocketHandler$$anon$1.run(SbtServerSocketHandler.scala:43)
+Caused by: java.io.EOFException
+	at java.io.DataInputStream.readInt(DataInputStream.java:392)
+	at sbt.impl.ipc.Peer.receive(IPC.scala:95)
+	at sbt.impl.ipc.Peer.handshake(IPC.scala:49)
+	... 2 more
+Taking next connection to: 46181
+New client attempting to connect on port: 40693-46181
+  Address = /127.0.1.1:46181
+This client on port 40693 has uuid 14ffe746-9275-4ff4-8a73-0cc049075ea8 configName activator humanReadableName Activator protocolVersion 3 featureTags Vector()
+Connected Clients: activator-14ffe746-9275-4ff4-8a73-0cc049075ea8
+Taking next connection to: 46181
+Checking to see if clients are empty...
+No non-daemon clients connected after 3 min. Shutting down.
+Server socket thread exiting.
+0 clients open, will close them...
+All client sockets have been closed.
+Closing the 17774@SHUBHAM5252 logs at Fri Apr 22 09:05:58 IST 2016, goodbye.

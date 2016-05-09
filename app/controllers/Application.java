@@ -1,36 +1,71 @@
 package controllers;
 
-import play.mvc.*;
-import play.db.jpa.*;
-//import play.db.ebean.Model;
 import models.Person;
-import play.data.FormFactory;
-import javax.inject.Inject;
-import java.util.List;
-import play.*;
-import views.html.*;
-import static play.libs.Json.*;
+import play.mvc.BodyParser;
+import play.mvc.Controller;
+import play.mvc.Result;
+
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
 
 public class Application extends Controller {
 
-    @Inject
-    FormFactory formFactory;
-
     public Result index() {
-        return ok(index.render("Welcome."));
+        try {
+            String list = new Person().getPersonName();
+            return ok(list);
+        } catch (SQLException e) {
+            return internalServerError(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            return internalServerError(e.getMessage());
+        } catch (FileNotFoundException e) {
+            return internalServerError(e.getMessage());
+        }
+
     }
 
-    @Transactional
+    @BodyParser.Of(BodyParser.FormUrlEncoded.class)
     public Result addPerson() {
-        Person person = formFactory.form(Person.class).bindFromRequest().get();
-        JPA.em().persist(person);
-        return redirect(routes.Application.index());
+        try {
+            Person person = Person.getPersonObject(request().body().asFormUrlEncoded());
+            person.save();
+            String list =person.getPersonName();
+            return ok(list);
+        } catch (IllegalArgumentException ex) {
+            return badRequest(ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            return internalServerError("ClassNotFound" + ex.getMessage());
+        } catch (SQLException e) {
+            return internalServerError("Sql Exception" + e.getMessage());
+        } catch (FileNotFoundException e) {
+            return internalServerError("FileNotFound" + e.getMessage());
+        }
     }
 
-    @Transactional(readOnly = true)
-    public Result getPersons() {
-       //List<Person> persons= new Model.Finder(String.class, Person.class).all;
-        List<Person> persons = (List<Person>) JPA.em().createQuery("select p from Person p").getResultList();
-        return ok(toJson(persons));
+    public Result removePerson(String id) {
+        try {
+            if (Person.remove(Integer.parseInt(id))) {
+                return ok("Person not exist");
+            } else {
+                return ok("removed!");
+            }
+        } catch (SQLException e) {
+            return internalServerError("Cant Remove" + e.getMessage());
+        } catch (ClassNotFoundException e) {
+            return internalServerError("Class not found" + e.getMessage());
+        }
+    }
+
+    public Result updatePerson(String id, String name) {
+        try {
+            Person.update(Integer.parseInt(id), name);
+            return ok();
+        } catch (FileNotFoundException e) {
+            return internalServerError(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            return internalServerError(e.getMessage());
+        } catch (SQLException e) {
+            return internalServerError(e.getMessage());
+        }
     }
 }
