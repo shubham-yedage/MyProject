@@ -3,11 +3,9 @@
 # ~~~~
 
 # Home page
-# Map static resources from the /public folder to the /assets URL path
 
 GET     /person controllers.Assets.at(path="/public", file="index.html")
 GET     /persons    controllers.Application.index()
 POST    /person   controllers.Application.addPerson()
 DELETE  /person/:id    controllers.Application.removePerson(id)
 PUT    /person/:id&:name   controllers.Application.updatePerson(id,name)
-

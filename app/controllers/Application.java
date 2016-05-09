@@ -67,5 +67,6 @@ public class Application extends Controller {
         } catch (SQLException e) {
             return internalServerError(e.getMessage());
         }
+
     }
 }

@@ -1,4 +1,4 @@
-import play.sbt.routes.RoutesKeys._
+
 
 name := """play-java-intro"""
 
@@ -12,8 +12,7 @@ libraryDependencies ++= Seq(
   // If you enable PlayEbean plugin you must remove these
   // JPA dependencies to avoid conflicts.
   javaJpa,
-  "org.hibernate" % "hibernate-entitymanager" % "4.3.7.Final"
-
+  "org.hibernate" % "hibernate-entitymanager" % "4.3.7.Final",
+  "mysql" % "mysql-connector-java" % "5.1.18"
 
 )
-

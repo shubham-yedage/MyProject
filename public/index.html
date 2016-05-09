@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<input lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>welcome</title>
@@ -7,57 +7,62 @@
 </head>
 <h1>Welcome</h1>
 <input id="name"/>
-<input id="id_data" value="id"/>
-<button type="button" onclick="removeName()">remove</button>
-<button type="button" onclick="change()">ADD</button>
-<p id="id2" ></p>
-
+<input id="id_data" value="From 1 onwards..."/>
+<button type="button" onclick="addPerson()">ADD</button>
+<button type="button" onclick="removeName()">REMOVE</button>
+<button onclick="updatePerson()">UPDATE</button>
+<p id="id2"></p>
+<>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script>
-    var text=document.getElementById("name").value;
-    var data;
-    var xhr = new XMLHttpRequest();
-
     $( window ).load(function() {
         // Run code
-        $.get("http://localhost:9000/persons", function(data, status){
-        showResult(data);
-        });
+        showResult();
     });
 
-    function change(){
+    function addPerson(){
         text=document.getElementById("name").value;
         $.post('http://localhost:9000/person',
         {
             'name': text
         },
         function(data,status){
-            showResult(data);
+            showResult();
         });
-    }
-
-    function showResult(data)
-    {
-        document.getElementById("id2").innerHTML = data;
     }
 
     function removeName()
     {
-        data=document.getElementById("id_data").value;
-        alert("data:"+data);
-        xhr.open("DELETE", "http://localhost:9000/person/1");
+        var xhr = new XMLHttpRequest();
+        var value=document.getElementById("id_data").value;
+        alert("value:"+value);
+        //value='8';
+        xhr.open("DELETE", "http://localhost:9000/person/"+value);
         xhr.withCredentials = true;
-        //xhr.send(data);
-    }
-function remove(id)
-    {
-        //data=document.getElementById("id_data").value;
-//        alert("data:"+data);
-        xhr.open("DELETE", "http://localhost:9000/person/"+id);
-        xhr.withCredentials = true;
-        //xhr.send(data);
+        xhr.send(value);
+        showResult();
     }
 
-    </script>
+
+    function updatePerson()
+    {
+        var xhr = new XMLHttpRequest();
+        var id=document.getElementById("id_data").value;
+        var name=document.getElementById("name").value;
+        alert("values:"+name+"&"+id);
+        xhr.open("PUT", "http://localhost:9000/person/"+id+"&"+name);
+        xhr.withCredentials = true;
+        var data=id+"&"+name;
+        xhr.send(data);
+        showResult();
+    }
+
+    function showResult()
+    {
+      $.get("http://localhost:9000/persons", function(data, status){
+        document.getElementById("id2").innerHTML = data;
+        });
+    }
+</script>
 </body>
 </html>

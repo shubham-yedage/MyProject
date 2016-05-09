@@ -1,5 +1,6 @@
 package models;
 
+
 import util.DBUtil;
 
 import java.io.FileNotFoundException;
@@ -54,18 +55,20 @@ public class Person {
         Statement statement = DBUtil.getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery("select * from person");
         String list = "";
+        resultSet.next();
         while (resultSet.next()) {
             String name1 = resultSet.getString("name");
             int id = resultSet.getInt("id");
-            list = list.concat("<p>" + name1 + " <button onclick=\"remove("+id+")\">k</button></p>");
+            //list = list.concat("<p>" + name1 + " <button onclick=\"remove("+id+")\">k</button></p>");
+            list = list.concat("<p> {id:"+id +"name:" + name1 + "}</p>");
         }
         return list;
     }
     public boolean save() throws SQLException, ClassNotFoundException {
         PreparedStatement stmt = DBUtil.getConnection().prepareStatement("insert into person(id,name) values (?,?)");
-            stmt.setInt(1,id);
-            stmt.setString(2, name);
-            return stmt.execute();
+        stmt.setInt(1,id);
+        stmt.setString(2, name);
+        return stmt.execute();
     }
 
     public static Boolean remove(int id) throws SQLException, ClassNotFoundException {
@@ -82,8 +85,6 @@ public class Person {
         if(preparedStatement.execute()) {
             throw new FileNotFoundException("ID Not found!");
         }
-
         return true;
     }
 }
-
