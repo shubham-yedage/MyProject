@@ -1,19 +1,21 @@
 package controllers;
 
 import models.Person;
+import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.util.List;
 
 public class Application extends Controller {
 
     public Result index() {
         try {
-            String list = new Person().getPersonName();
-            return ok(list);
+            List<Person> list = Person.getPersons();
+            return ok(Json.toJson(list));
         } catch (SQLException e) {
             return internalServerError(e.getMessage());
         } catch (ClassNotFoundException e) {
@@ -29,8 +31,8 @@ public class Application extends Controller {
         try {
             Person person = Person.getPersonObject(request().body().asFormUrlEncoded());
             person.save();
-            String list =person.getPersonName();
-            return ok(list);
+            List<Person> list =person.getPersons();
+            return ok(Json.toJson(list));
         } catch (IllegalArgumentException ex) {
             return badRequest(ex.getMessage());
         } catch (ClassNotFoundException ex) {

@@ -16,16 +16,15 @@ import java.util.Map;
 public class Person {
     public String name;
     public int id;
-    public static int count = 0;
+
 
     public Person(String name) throws SQLException, ClassNotFoundException {
-        this.name = name;
-        count=getIDFromDB()+1;
-        this.id = getIDFromDB() + 1;
+        this(name, getIDFromDB() + 1);
     }
 
-    public Person() throws SQLException, ClassNotFoundException {
-
+    public Person(String name, int id) throws SQLException, ClassNotFoundException {
+        this.name = name;
+        this.id = id;
     }
 
     public static Person getPersonObject(Map<String, String[]> form) throws SQLException, ClassNotFoundException {
@@ -51,18 +50,18 @@ public class Person {
         return listPerson.getInt("id");
     }
 
-    public String getPersonName() throws SQLException, FileNotFoundException, ClassNotFoundException {
+    public static List<Person> getPersons() throws SQLException, FileNotFoundException, ClassNotFoundException {
         Statement statement = DBUtil.getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery("select * from person");
-        String list = "";
+
+        ArrayList<Person> persons = new ArrayList<>();
         resultSet.next();
         while (resultSet.next()) {
             String name1 = resultSet.getString("name");
             int id = resultSet.getInt("id");
-            //list = list.concat("<p>" + name1 + " <button onclick=\"remove("+id+")\">k</button></p>");
-            list = list.concat("<p> {id:"+id +"name:" + name1 + "}</p>");
+            persons.add(new Person(name1, id));
         }
-        return list;
+        return persons;
     }
     public boolean save() throws SQLException, ClassNotFoundException {
         PreparedStatement stmt = DBUtil.getConnection().prepareStatement("insert into person(id,name) values (?,?)");
@@ -87,4 +86,5 @@ public class Person {
         }
         return true;
     }
+
 }

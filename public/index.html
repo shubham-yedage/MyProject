@@ -5,18 +5,48 @@
     <title>welcome</title>
 
 </head>
+<body>
 <h1>Welcome</h1>
 <input id="name"/>
 <input id="id_data" value="From 1 onwards..."/>
 <button type="button" onclick="addPerson()">ADD</button>
 <button type="button" onclick="removeName()">REMOVE</button>
 <button onclick="updatePerson()">UPDATE</button>
-<p id="id2"></p>
-<>
+<div id="persons"></div>
+
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+<h2><a href="#" id="addScnt">Add Another Input Box</a></h2>
+
+<div id="p_scents">
+    <p>
+        <label for="p_scents"><input type="text" id="p_scnt" size="20" name="p_scnt" value=""
+                                     placeholder="Input Value"/></label>
+    </p>
+</div>
+
 <script>
     $( window ).load(function() {
         // Run code
+            $(function() {
+        var scntDiv = $('#p_scents');
+        var i = $('#p_scents p').size() + 1;
+
+        $('#addScnt').on('click', function() {
+                $('<p><label for="p_scnts"><input type="text" id="p_scnt" size="20" name="p_scnt_' + i +'" value="" placeholder="Input Value" /></label> <a href="#" id="remScnt">Remove</a></p>').appendTo(scntDiv);
+                i++;
+                return false;
+        });
+
+        $('#remScnt').on('click', function() {
+                if( i > 2 ) {
+                        $(this).parents('p').remove();
+                        i--;
+                }
+                return false;
+        });
+});
         showResult();
     });
 
@@ -36,7 +66,6 @@
         var xhr = new XMLHttpRequest();
         var value=document.getElementById("id_data").value;
         alert("value:"+value);
-        //value='8';
         xhr.open("DELETE", "http://localhost:9000/person/"+value);
         xhr.withCredentials = true;
         xhr.send(value);
@@ -57,12 +86,38 @@
         showResult();
     }
 
+function removePerson(id){
+var xhr = new XMLHttpRequest();
+        xhr.open("DELETE", "http://localhost:9000/person/"+id);
+        xhr.withCredentials = true;
+        xhr.send(id);
+        //showResult();
+}
+
     function showResult()
     {
       $.get("http://localhost:9000/persons", function(data, status){
-        document.getElementById("id2").innerHTML = data;
+        var ele = $('#persons');
+        var newHTML = [];
+        $.each(data, function( index, value ) {
+         newHTML.push('<div id="div"+index><label>Name: </label>'+ value.name +
+         '<label></label>'+
+         '<a href="#" id="removePerson"+index>remove</a></div>'
+         );
         });
+
+        ele.html(newHTML.join(""));
+      //  $.each(data, function( index, value ) {
+          $('#removePerson'+index).click(function() {
+                        $(this).parents('div').remove();
+          });
+        //});
+      });
     }
+
+
+
 </script>
+
 </body>
 </html>
